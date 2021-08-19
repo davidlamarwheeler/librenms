@@ -7,7 +7,7 @@ mib_dir: mikrotik
 rfc1628_compat: true
 over:
     - { graph: device_bits, text: 'Device Traffic' }
-    - { graph: device_processor, text: 'CPU Usage' }
+    - { graph: device_mtxr_hotspot_users, text: 'Hotspot Users' }
     - { graph: device_mempool, text: 'Memory Usage' }
 discovery:
     -

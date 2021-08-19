@@ -361,5 +361,28 @@ class Routeros extends OS implements
             data_update($this->getDeviceArray(), 'routeros_pppoe_sessions', $tags, $fields);
             $this->enableGraph('routeros_pppoe_sessions');
         }
+        
+        $hotspotActiveUserIPs = snmp_walk(
+            $this->getDeviceArray(),
+            '1.3.6.1.4.1.14988.1.1.5.1.1.5', // MIKROTIK-MIB::mtxrHotspotActiveUserIP
+            '-Osqn',
+            'MIKROTIK-MIB'
+        );
+        
+        $hotspotUsers = count(explode("\n", $hotspotActiveUserIPs));
+        
+        echo($hotspotUsers . " active hotspot users" . PHP_EOL);
+        
+        if (is_numeric($hotspotUsers)) {
+            $rrd_def = RrdDefinition::make()->addDataset('hotspotUsers', 'GAUGE', 0);
+            
+            $fields = [
+                'hotspotUsers' => $hotspotUsers,
+            ];
+            
+            $tags = compact('rrd_def');
+            data_update($this->getDeviceArray(), 'mtxr_hotspot_users', $tags, $fields);
+            $this->enableGraph('mtxr_hotspot_users');
+        }
     }
 }
